@@ -1,4 +1,4 @@
-# Hướng dẫn Cài đặt và Chạy Dự án ViTextCaps Captioning
+# vitextcaps-captioning
 
 Mục tiêu của dự án là tạo chú thích cho hình ảnh một cách chính xác và hiệu quả.
 
@@ -17,7 +17,6 @@ Mục tiêu của dự án là tạo chú thích cho hình ảnh một cách ch�
     !pip install -r requirements.txt
 
 3. Tạo thư mục và giải nén dữ liệu:
-       ```bash
 
         !mkdir -p /content/vitextcaps-captioning/data/fasttext
    
