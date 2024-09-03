@@ -30,6 +30,7 @@ class MMA_SR_Model(nn.Module):
         self.max_iter = vocab.max_answer_length
         # self.training = True
         
+        
         self.build() 
         
     def build(self):
@@ -214,7 +215,7 @@ class PrevPredEmbeddings(nn.Module):
 
     def __init__(self, config):
         super().__init__()
-        MAX_DEC_LENGTH = 100
+        MAX_DEC_LENGTH = 410
         MAX_TYPE_NUM = 5
 
         hidden_size = config.hidden_size
@@ -337,8 +338,9 @@ class MMA_SR(nn.Module):
         self.dropout = nn.Dropout(0.3)
         self.decoder_dim = decoder_dim
         self.embed_config = mmt_config
+        print(self.embed_config)
         self.vocab_size = len(vocab)
-        self.ocr_size = 100
+        self.ocr_size = mmt_config.max_position_embeddings
         self.voc_emb = nn.Embedding(self.vocab_size, emb_dim)
         self.embed = PrevPredEmbeddings(self.embed_config)
         self.ss_prob = 0.0
@@ -353,6 +355,7 @@ class MMA_SR(nn.Module):
 
         self.fc = nn.Linear(decoder_dim, self.vocab_size)
         # self.fc2 = nn.Linear(self.vocab_size+50, self.vocab_size+50)
+        print(f"vocab_size: {self.vocab_size}, ocr_size: {self.ocr_size}")
 
     def init_hidden_state(self, batch_size, device):
         h = torch.zeros(batch_size, self.decoder_dim).to(device)  # (batch_size, decoder_dim)
@@ -361,18 +364,23 @@ class MMA_SR(nn.Module):
 
     def forward(self, obj_features, ocr_features, ocr_mask, target_caption=None, target_cap_len=None, training=True,
                 label=None):
-        max_len = 30
+        max_len = 410
         batch_size = obj_features.size(0)
         device = obj_features.device
         repeat_mask = torch.zeros([batch_size, self.vocab_size + self.ocr_size]).to(device)
 
+        # Move tensors to the same device
+        ocr_features = ocr_features.to(device)
+        ocr_mask = ocr_mask.to(device)
+
         if training:
+            target_caption = target_caption.to(device)
+            target_cap_len = target_cap_len.to(device)
             caption_lengths, sort_ind = target_cap_len.squeeze(1).sort(dim=0, descending=True)
         else:
             target_caption = torch.zeros([batch_size, max_len], dtype=torch.long).to(device)
             target_caption[:, 0] = 1
-            caption_lengths = torch.tensor([max_len for _ in range(batch_size)])
-
+            caption_lengths = torch.tensor([max_len for _ in range(batch_size)], device=device)
 
         h_obj, c_obj = self.init_hidden_state(batch_size, device)  # (batch_size, decoder_dim)
         h_ocr, c_ocr = self.init_hidden_state(batch_size, device)
@@ -422,8 +430,13 @@ class MMA_SR(nn.Module):
 
             s_v = self.fc( self.dropout(h_obj) )
             s_o = self.ocr_prt(self.dropout(h_ocr), ocr_features, ocr_mask)
+            s_o_padded = F.pad(s_o, (0, self.ocr_size - s_o.size(1)), value=-float('inf'))
 
-            scores = torch.cat([s_v, s_o], dim=-1)
+            print("s_v.shape", s_v.shape)
+            print("s_o.shape", s_o_padded.shape)
+
+            scores = torch.cat([s_v, s_o_padded], dim=-1)
+            print(scores.shape)
 
             if not training and t < dec_num - 1:
 
@@ -435,8 +448,7 @@ class MMA_SR(nn.Module):
                     used_idx = pre_idx[j]
                     if used_idx >= self.vocab_size:
                         repeat_mask[j, used_idx] = -1e6
-
+            
             predictions[:, t] = scores
-
 
         return predictions
