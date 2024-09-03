@@ -338,7 +338,7 @@ class MMA_SR(nn.Module):
         self.dropout = nn.Dropout(0.3)
         self.decoder_dim = decoder_dim
         self.embed_config = mmt_config
-        print(self.embed_config)
+        # print(self.embed_config)
         self.vocab_size = len(vocab)
         self.ocr_size = mmt_config.max_position_embeddings
         self.voc_emb = nn.Embedding(self.vocab_size, emb_dim)
@@ -355,7 +355,7 @@ class MMA_SR(nn.Module):
 
         self.fc = nn.Linear(decoder_dim, self.vocab_size)
         # self.fc2 = nn.Linear(self.vocab_size+50, self.vocab_size+50)
-        print(f"vocab_size: {self.vocab_size}, ocr_size: {self.ocr_size}")
+        # print(f"vocab_size: {self.vocab_size}, ocr_size: {self.ocr_size}")
 
     def init_hidden_state(self, batch_size, device):
         h = torch.zeros(batch_size, self.decoder_dim).to(device)  # (batch_size, decoder_dim)
@@ -432,11 +432,11 @@ class MMA_SR(nn.Module):
             s_o = self.ocr_prt(self.dropout(h_ocr), ocr_features, ocr_mask)
             s_o_padded = F.pad(s_o, (0, self.ocr_size - s_o.size(1)), value=-float('inf'))
 
-            print("s_v.shape", s_v.shape)
-            print("s_o.shape", s_o_padded.shape)
+            # print("s_v.shape", s_v.shape)
+            # print("s_o.shape", s_o_padded.shape)
 
-            scores = torch.cat([s_v, s_o_padded], dim=-1)
-            print(scores.shape)
+            # scores = torch.cat([s_v, s_o_padded], dim=-1)
+            # print(scores.shape)
 
             if not training and t < dec_num - 1:
 
