@@ -435,7 +435,7 @@ class MMA_SR(nn.Module):
             # print("s_v.shape", s_v.shape)
             # print("s_o.shape", s_o_padded.shape)
 
-            # scores = torch.cat([s_v, s_o_padded], dim=-1)
+            scores = torch.cat([s_v, s_o_padded], dim=-1)
             # print(scores.shape)
 
             if not training and t < dec_num - 1:
