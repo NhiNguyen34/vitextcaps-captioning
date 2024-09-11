@@ -2,7 +2,7 @@ TASK: TrainingStacMR
 
 DATASET:
   FEATURE_DATASET:
-    TYPE: OcrFeatureDataset
+    TYPE: ViTCFeatureDataset
     BATCH_SIZE: 64
     WORKERS: 0
     FEATURE_PATH:
@@ -15,7 +15,7 @@ DATASET:
     WORD_EMBEDDING: ViFastText
     WORD_EMBEDDING_CACHE: null
   DICT_DATASET:
-    TYPE: OcrDictionaryDataset
+    TYPE: ViTCDictionaryDataset
     BATCH_SIZE: 64
     WORKERS: 0 
     FEATURE_PATH:
@@ -90,9 +90,11 @@ MODEL:
   OCR_EMBEDDING:
     D_FEATURE: 812 # 256 (det features) + 256 (rec features) + 300 (fasttext)
     DROPOUT: .1
+
   CLASSIFIER:
-    OCR_MAX_NUM: 30
+    OCR_MAX_NUM: 50
     MAX_LEN: 60
+    VOCAB_SIZE: 119547 # mbert vocab size
 
   TEXT_EMBEDDING:
     ARCHITECTURE: UsualEmbedding

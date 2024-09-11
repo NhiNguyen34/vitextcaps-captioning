@@ -4,6 +4,7 @@ from typing import List
 
 from utils.instance import Instance, InstanceList
 
+
 def get_tokenizer(tokenizer):
     if callable(tokenizer):
         return tokenizer
@@ -49,6 +50,17 @@ def get_tokenizer(tokenizer):
                   "See the docs at https://github.com/vncorenlp/VnCoreNLP for more information.")
             raise
 
+    elif tokenizer == 'mbert':
+        try:
+            from transformers import BertTokenizer
+            tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
+            return tokenizer
+        except ImportError:
+            print("Please install transformers package. "
+                  "See the docs at https://github.com/huggingface/transformers for more information.")
+            raise
+
+
 def preprocess_sentence(sentence: str, tokenizer: str):
     sentence = sentence.lower()
     sentence = re.sub(r"[“”]", "\"", sentence)
@@ -70,12 +82,14 @@ def preprocess_sentence(sentence: str, tokenizer: str):
     sentence = re.sub(r"\&", " & ", sentence)
     sentence = re.sub(r"\*", " * ", sentence)
     # tokenize the sentence
-    tokenizer = get_tokenizer(tokenizer)
-    sentence = tokenizer(sentence)
+    if tokenizer is not None:
+        tokenizer = get_tokenizer(tokenizer)
+        sentence = tokenizer(sentence)
     sentence = " ".join(sentence.strip().split()) # remove duplicated spaces
     tokens = sentence.strip().split()
     
     return tokens
+
 
 def reporthook(t):
     """
@@ -98,6 +112,7 @@ def reporthook(t):
         last_b[0] = b
     return inner
 
+
 def unk_init(token, dim):
     '''
         For default:
@@ -115,11 +130,14 @@ def unk_init(token, dim):
         return torch.ones(dim) * 2
     return torch.ones(dim) * 3
 
+
 def default_value():
     return None
 
+
 def collate_fn(samples: List[Instance]):
     return InstanceList(samples)
+
 
 def is_japanese_sentence(text: str):
     # REFERENCE UNICODE TABLES: 

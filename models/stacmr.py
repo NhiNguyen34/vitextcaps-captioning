@@ -20,7 +20,7 @@ class VSRN(nn.Module):
         
         self.vocab = vocab
         self.config = config
-        self.vocab_size = len(self.vocab) + 100
+        self.vocab_size = self.config.CLASSIFIER.VOCAB_SIZE
         self.d_model = self.config.D_MODEL
         self.obj_enc = ObjectEncoder(obj_in_dim=self.config.OBJECT_EMBEDDING.D_FEATURE,
                                      hidden_size=self.config.D_MODEL)
@@ -78,21 +78,13 @@ class VSRN(nn.Module):
         ocr_token_embeddings = item.ocr_fasttext_features.to(self.config.DEVICE)
         ocr_rec_features = item.ocr_rec_features.to(self.config.DEVICE)
         ocr_det_features = item.ocr_det_features.to(self.config.DEVICE)
-        
-        answer_tokens = self.generate_answer_tokens(item.answers, item.ocr_tokens)
-        shifted_right_answer_tokens = torch.zeros_like(answer_tokens).fill_(self.vocab.padding_idx)
-        shifted_right_answer_tokens[:-1] = answer_tokens[1:]
-        
-        answer_tokens = torch.where(answer_tokens == self.vocab.eos_idx, self.vocab.padding_idx, answer_tokens) # remove eos_token in answer
-        answer_mask = torch.where(answer_tokens > 0, 1, 0)
-        
-        caption_tokens = answer_tokens.squeeze().to(self.config.DEVICE)
-        caption_masks = answer_mask.squeeze().to(self.config.DEVICE)
-        
+        caption_tokens = item.answer_tokens.squeeze().to(self.config.DEVICE)
+        caption_masks = item.answer_mask.squeeze().to(self.config.DEVICE)
+
         B, _ = caption_masks.shape
         temp = np.zeros(B)
         for i in range(len(temp)):
-            temp[i]=_
+            temp[i] = _
 
         objects = self.obj_enc(obj_boxes, obj_features)
         ocrs = self.ocr_enc(ocr_boxes,
