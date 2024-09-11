@@ -17,8 +17,10 @@ class VSRN(nn.Module):
     def __init__(self, config, vocab=None):
         super().__init__()
         # vocab_size, word_dim, embed_size, num_layers, use_abs=False
+        
         self.vocab = vocab
         self.config = config
+        self.vocab_size = len(self.vocab) + 100
         self.d_model = self.config.D_MODEL
         self.obj_enc = ObjectEncoder(obj_in_dim=self.config.OBJECT_EMBEDDING.D_FEATURE,
                                      hidden_size=self.config.D_MODEL)
@@ -30,7 +32,7 @@ class VSRN(nn.Module):
                                                use_abs=self.config.ENCODER.USE_ABS,
                                                no_imgnorm=self.config.ENCODER.NO_IMGNORM)
 
-        self.txt_enc = EncoderText(vocab_size=len(self.vocab),
+        self.txt_enc = EncoderText(vocab_size=self.vocab_size,
                                    word_dim=self.config.TEXT_EMBEDDING.D_EMBEDDING,
                                    embed_size=self.config.D_MODEL,
                                    num_layers=self.config.RNN.NUM_LAYERS,
@@ -52,7 +54,7 @@ class VSRN(nn.Module):
             rnn_dropout_p=self.config.RNN.RNN_DROPOUT_P)
 
         self.decoder = DecoderRNN(
-            vocab_size=len(self.vocab),
+            vocab_size=self.vocab_size,
             max_len=self.config.CLASSIFIER.MAX_LEN,
             dim_hidden=self.config.D_MODEL,
             dim_word=self.config.TEXT_EMBEDDING.D_EMBEDDING,
