@@ -113,6 +113,9 @@ class TrainingStacMR(OpenEndedTask):
         self.criterion = ContrastiveLoss(margin=config.MODEL.LOSS_FN.MARGIN,
                                          measure=config.MODEL.LOSS_FN.MEASURE,
                                          max_violation=config.MODEL.LOSS_FN.MAX_VIOLATION)
+
+        self.crit.to(self.device)
+        self.criterion.to(self.device)
         #self.loss_fn = NLLLoss(ignore_index=self.vocab.padding_idx)
 
     def evaluate_loss(self, dataloader):
@@ -134,11 +137,15 @@ class TrainingStacMR(OpenEndedTask):
                     shifted_right_answer_tokens = items.shifted_right_answer_tokens
                     # loss = self.loss_fn(out.view(-1, out.shape[-1]), shifted_right_answer_tokens.view(-1))
                     
+                    answer_mask = self.model.generate_answer_tokens(items.answer,
+                                                                    items.answer_tokens,
+                                                                    mask=True)
+                    
                     caption_loss = self.crit(seq_prob, 
                                              shifted_right_answer_tokens, 
-                                             items.answer_mask)
+                                             answer_mask)
                 
-                    retrieval_loss = self.forward_loss(img_emb, cap_emb)
+                    retrieval_loss = self.criterion(img_emb, cap_emb)
                     
                     loss = 2.0 * retrieval_loss + caption_loss
                     
@@ -192,9 +199,12 @@ class TrainingStacMR(OpenEndedTask):
                 shifted_right_answer_tokens = items.shifted_right_answer_tokens
                 self.optim.zero_grad()
                 # loss = self.loss_fn(out.view(-1, out.shape[-1]), shifted_right_answer_tokens.view(-1))
+                answer_mask = self.model.generate_answer_tokens(items.answer,
+                                                                items.answer_tokens,
+                                                                mask=True)
                 caption_loss = self.crit(seq_probs, 
                                          shifted_right_answer_tokens, 
-                                         items.answer_mask)
+                                         answer_mask)
                 
                 retrieval_loss = self.criterion(img_emb, cap_emb)
                 

@@ -19,6 +19,7 @@ class VSRN(nn.Module):
         # vocab_size, word_dim, embed_size, num_layers, use_abs=False
         self.vocab = vocab
         self.config = config
+        self.d_model = self.config.D_MODEL
         self.obj_enc = ObjectEncoder(obj_in_dim=self.config.OBJECT_EMBEDDING.D_FEATURE,
                                      hidden_size=self.config.D_MODEL)
 
@@ -75,8 +76,16 @@ class VSRN(nn.Module):
         ocr_token_embeddings = item.ocr_fasttext_features.to(self.config.DEVICE)
         ocr_rec_features = item.ocr_rec_features.to(self.config.DEVICE)
         ocr_det_features = item.ocr_det_features.to(self.config.DEVICE)
-        caption_tokens = item.answer_tokens.squeeze().to(self.config.DEVICE)
-        caption_masks = item.answer_mask.squeeze().to(self.config.DEVICE)
+        
+        answer_tokens = self.generate_answer_tokens(item.answer, item.ocr_tokens)
+        shifted_right_answer_tokens = torch.zeros_like(answer_tokens).fill_(self.vocab.padding_idx)
+        shifted_right_answer_tokens[:-1] = answer_tokens[1:]
+        
+        answer_tokens = torch.where(answer_tokens == self.vocab.eos_idx, self.vocab.padding_idx, answer_tokens) # remove eos_token in answer
+        answer_mask = torch.where(answer_tokens > 0, 1, 0)
+        
+        caption_tokens = answer_tokens.squeeze().to(self.config.DEVICE)
+        caption_masks = answer_mask.squeeze().to(self.config.DEVICE)
         
         B, _ = caption_masks.shape
         temp = np.zeros(B)
@@ -116,6 +125,19 @@ class VSRN(nn.Module):
                    }
 
         return out
+    
+    def generate_answer_tokens(self, answers, ocr_tokens, mask=False):
+        answer_tokens = []
+        for i in range(len(answers)):
+            answer_tokens.append(self.vocab.encode_answer(answers[i], ocr_tokens[i]))
+        
+        answer_tokens = torch.stack(answer_tokens).to(self.config.DEVICE)
+        
+        if mask == True:
+            result = torch.where(answer_tokens > 0, 1, 0)
+        else:
+            result = answer_tokens
+        return result
 
 
 class S2VTAttModel(nn.Module):
