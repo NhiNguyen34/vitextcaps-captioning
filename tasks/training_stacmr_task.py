@@ -9,7 +9,7 @@ from builders.task_builder import META_TASK
 import evaluation
 import evaluate
 from pycocoevalcap.cider.cider import Cider
-
+from data_utils.utils import get_tokenizer
 import os
 from tqdm import tqdm
 import itertools
@@ -108,7 +108,7 @@ def order_sim(im, s):
 class TrainingStacMR(OpenEndedTask):
     def __init__(self, config):
         super().__init__(config)
-
+        self.tokenizer = get_tokenizer('mbert')
         self.crit = LanguageModelCriterion()
         self.criterion = ContrastiveLoss(margin=config.MODEL.LOSS_FN.MARGIN,
                                          measure=config.MODEL.LOSS_FN.MEASURE,
@@ -134,16 +134,14 @@ class TrainingStacMR(OpenEndedTask):
                     cap_emb = results['cap_emb']
                     # out = F.log_softmax(out, dim=-1)
                     
-                    shifted_right_answer_tokens = items.shifted_right_answer_tokens
+                    shifted_right_answer_tokens = items.answer_tokens.squeeze()
                     # loss = self.loss_fn(out.view(-1, out.shape[-1]), shifted_right_answer_tokens.view(-1))
                     
-                    answer_mask = self.model.generate_answer_tokens(items.answers,
-                                                                    items.answer_tokens,
-                                                                    mask=True)
+                    answer_masks = items.answer_masks.squeeze()
                     
                     caption_loss = self.crit(seq_prob, 
                                              shifted_right_answer_tokens, 
-                                             answer_mask)
+                                             answer_masks)
                 
                     retrieval_loss = self.criterion(img_emb, cap_emb)
                     
@@ -171,9 +169,8 @@ class TrainingStacMR(OpenEndedTask):
                 outs = results["predicted_token"]
 
                 answers_gt = items.answers
-                answers_gen = self.vocab.decode_answer(outs.contiguous(),
-                                                       items.ocr_tokens,
-                                                       join_words=False)
+                answers_gen = self.tokenizer.batch_decode(outs,
+                                                          skip_special_tokens=True)
                 for i, (gts_i, gen_i) in enumerate(zip(answers_gt, answers_gen)):
                     gen_i = ' '.join([k for k, g in itertools.groupby(gen_i)])
                     gens['%d_%d' % (it, i)] = [gen_i, ]
@@ -196,15 +193,13 @@ class TrainingStacMR(OpenEndedTask):
                 cap_emb = results['cap_emb']
                 #out = F.log_softmax(out, dim=-1)
 
-                shifted_right_answer_tokens = items.shifted_right_answer_tokens
+                shifted_right_answer_tokens = items.answer_tokens.squeeze()
                 self.optim.zero_grad()
                 # loss = self.loss_fn(out.view(-1, out.shape[-1]), shifted_right_answer_tokens.view(-1))
-                answer_mask = self.model.generate_answer_tokens(items.answers,
-                                                                items.answer_tokens,
-                                                                mask=True)
+                answer_masks = items.answer_masks.squeeze()
                 caption_loss = self.crit(seq_probs, 
                                          shifted_right_answer_tokens, 
-                                         answer_mask)
+                                         answer_masks)
                 
                 retrieval_loss = self.criterion(img_emb, cap_emb)
                 
@@ -290,13 +285,13 @@ class TrainingStacMR(OpenEndedTask):
                 outs = result["predicted_token"]
 
                 answers_gt = items.answers
-                answers_gen, in_fixed_vocab = self.vocab.decode_answer_with_determination(outs.contiguous().view(-1, self.vocab.max_answer_length),
-                                                        items.ocr_tokens, join_words=False)
+                answers_gen = self.tokenizer.batch_decode(outs,
+                                                          skip_special_tokens=True)
                 gts = {}
                 gens = {}
-                for i, (gts_i, gen_i, in_fixed_vocab_i) in enumerate(zip(answers_gt, answers_gen, in_fixed_vocab)):
+                for i, (gts_i, gen_i) in enumerate(zip(answers_gt, answers_gen)):
                     gen_i = ' '.join([k for k, g in itertools.groupby(gen_i)])
-                    gens['%d_%d' % (it, i)] = (gen_i, in_fixed_vocab_i)
+                    gens['%d_%d' % (it, i)] = [gen_i, ]
                     gts['%d_%d' % (it, i)] = gts_i
                     overall_gens['%d_%d' % (it, i)] = [gen_i, ]
                     overall_gts['%d_%d' % (it, i)] = gts_i

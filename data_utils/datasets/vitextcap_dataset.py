@@ -11,7 +11,7 @@ from typing import Dict, Any, List
 from data_utils.utils import get_tokenizer, preprocess_sentence
 
 
-# @META_DATASET.register()
+@META_DATASET.register()
 class ViTCFeatureDataset(FeatureDataset):
     def __init__(self,
                  json_path: str,

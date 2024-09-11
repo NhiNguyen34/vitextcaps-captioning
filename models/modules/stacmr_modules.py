@@ -532,7 +532,7 @@ class EncoderText(nn.Module):
         self.embed_size = embed_size
 
         # word embedding
-        self.embed = nn.Embedding(17000, word_dim)
+        self.embed = nn.Embedding(vocab_size, word_dim)
 
         # caption embedding
         self.rnn = nn.GRU(word_dim, embed_size, num_layers, batch_first=True)

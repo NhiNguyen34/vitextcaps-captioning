@@ -30,7 +30,7 @@ DATASET:
   MIN_FREQ: 1
   VOCAB:
     TYPE: OcrVocab
-    TOKENIZER: null
+    TOKENIZER: mbert
     WORD_EMBEDDING: null
     WORD_EMBEDDING_CACHE: null
     MIN_FREQ: 1
