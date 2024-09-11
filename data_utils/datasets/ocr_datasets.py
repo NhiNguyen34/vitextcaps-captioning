@@ -25,23 +25,43 @@ class OcrFeatureDataset(FeatureDataset):
         features = np.load(feature_file, allow_pickle=True)[()]
         for key, feature in features.items():
             if isinstance(feature, np.ndarray):
-                features[key] = torch.tensor(feature)
+                features[key] = torch.tensor(feature, dtype=torch.float32)
 
         return features
   
     def load_fasttext_features(self, image_id: int) -> Dict[str, Any]:
         feature_file = os.path.join(self.fasttext_path, f"{image_id}.npy")
         features = np.load(feature_file, allow_pickle=True)[()]
+
+        if features.shape[0] < 1:
+            features = np.zeros([1, 300])
                 
-        return torch.tensor(features)
+        return torch.tensor(features, dtype=torch.float32)
 
     
     def load_scene_text_features(self, image_id: int) -> Dict[str, Any]:
         feature_file = os.path.join(self.scene_text_features_path, f"{image_id}.npy")
         features = np.load(feature_file, allow_pickle=True)[()]
         for key, feature in features.items():
+            if key == 'det_features':
+                if features[key].shape[0] < 1:
+                    features[key] = np.zeros([1, 256])
+            elif key == 'rec_features':
+                if features[key].shape[0] < 1:
+                    features[key] = np.zeros([1, 256])
+            elif key == 'boxes':
+                if features[key].shape[0] < 1:
+                    features[key] = np.zeros([1, 4])
+            elif key == 'texts':
+                if len(features[key]) == 0:
+                    features[key] = ['no_token']
+            elif key == 'scores':
+                if len(features[key]) == 0:
+                    features[key] = [0]
+
             if isinstance(feature, np.ndarray):
-                features[key] = torch.tensor(feature)
+                features[key] = torch.tensor(feature, dtype=torch.float32)
+
         
         ocr_fasttext_features = self.load_fasttext_features(image_id)
         ocr_nums = ocr_fasttext_features.shape[0]
@@ -92,7 +112,7 @@ class OcrFeatureDataset(FeatureDataset):
             ocr_tokens=ocr_tokens,
             question=" ".join(question),
             question_tokens=question_tokens,
-            answer=answer,
+            answers=answer,
             answer_tokens=answer_tokens,
             answer_mask=answer_mask,
             shifted_right_answer_tokens=shifted_right_answer_tokens
@@ -114,23 +134,42 @@ class OcrDictionaryDataset(DictionaryDataset):
         features = np.load(feature_file, allow_pickle=True)[()]
         for key, feature in features.items():
             if isinstance(feature, np.ndarray):
-                features[key] = torch.tensor(feature)
+                features[key] = torch.tensor(feature, dtype=torch.float32)
 
         return features
 
     def load_fasttext_features(self, image_id: int) -> Dict[str, Any]:
         feature_file = os.path.join(self.fasttext_path, f"{image_id}.npy")
         features = np.load(feature_file, allow_pickle=True)[()]
-                
-        return torch.tensor(features)
+        
+        if features.shape[0] < 1:
+            features = np.zeros([1, 300])
+
+        return torch.tensor(features, dtype=torch.float32)
 
     
     def load_scene_text_features(self, image_id: int) -> Dict[str, Any]:
         feature_file = os.path.join(self.scene_text_features_path, f"{image_id}.npy")
         features = np.load(feature_file, allow_pickle=True)[()]
         for key, feature in features.items():
+            if key == 'det_features':
+                if features[key].shape[0] < 1:
+                    features[key] = np.zeros([1, 256])
+            elif key == 'rec_features':
+                if features[key].shape[0] < 1:
+                    features[key] = np.zeros([1, 256])
+            elif key == 'boxes':
+                if features[key].shape[0] < 1:
+                    features[key] = np.zeros([1, 4])
+            elif key == 'texts':
+                if len(features[key]) == 0:
+                    features[key] = ['no_token']
+            elif key == 'scores':
+                if len(features[key]) == 0:
+                    features[key] = [0]
+
             if isinstance(feature, np.ndarray):
-                features[key] = torch.tensor(feature)
+                features[key] = torch.tensor(feature, dtype=torch.float32)
         
         ocr_fasttext_features = self.load_fasttext_features(image_id)
         ocr_nums = ocr_fasttext_features.shape[0]

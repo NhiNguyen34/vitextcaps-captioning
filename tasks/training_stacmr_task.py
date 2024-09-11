@@ -126,7 +126,7 @@ class TrainingStacMR(OpenEndedTask):
                 for it, items in enumerate(dataloader):
                     items = items.to(self.device)
                     with torch.no_grad():
-                        results = self.model(items, model='inference')
+                        results = self.model(items, mode='inference')
 
                     out = results["predicted_token"].contiguous()
                     seq_prob = out['scores']
@@ -137,7 +137,7 @@ class TrainingStacMR(OpenEndedTask):
                     shifted_right_answer_tokens = items.shifted_right_answer_tokens
                     # loss = self.loss_fn(out.view(-1, out.shape[-1]), shifted_right_answer_tokens.view(-1))
                     
-                    answer_mask = self.model.generate_answer_tokens(items.answer,
+                    answer_mask = self.model.generate_answer_tokens(items.answers,
                                                                     items.answer_tokens,
                                                                     mask=True)
                     
@@ -199,7 +199,7 @@ class TrainingStacMR(OpenEndedTask):
                 shifted_right_answer_tokens = items.shifted_right_answer_tokens
                 self.optim.zero_grad()
                 # loss = self.loss_fn(out.view(-1, out.shape[-1]), shifted_right_answer_tokens.view(-1))
-                answer_mask = self.model.generate_answer_tokens(items.answer,
+                answer_mask = self.model.generate_answer_tokens(items.answers,
                                                                 items.answer_tokens,
                                                                 mask=True)
                 caption_loss = self.crit(seq_probs, 

@@ -79,7 +79,7 @@ class VSRN(nn.Module):
         ocr_rec_features = item.ocr_rec_features.to(self.config.DEVICE)
         ocr_det_features = item.ocr_det_features.to(self.config.DEVICE)
         
-        answer_tokens = self.generate_answer_tokens(item.answer, item.ocr_tokens)
+        answer_tokens = self.generate_answer_tokens(item.answers, item.ocr_tokens)
         shifted_right_answer_tokens = torch.zeros_like(answer_tokens).fill_(self.vocab.padding_idx)
         shifted_right_answer_tokens[:-1] = answer_tokens[1:]
         
