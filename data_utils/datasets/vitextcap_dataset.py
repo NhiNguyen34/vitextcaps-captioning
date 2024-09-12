@@ -258,7 +258,6 @@ class ViTCDictionaryDataset(DictionaryDataset):
                                         add_special_tokens=False,
                                         return_tensors="pt")
 
-
         answer_tokens = answer_tokens_.input_ids
 
         answer_mask = answer_tokens_.attention_mask
@@ -270,5 +269,6 @@ class ViTCDictionaryDataset(DictionaryDataset):
             filename=filename,
             ocr_tokens=ocr_tokens,
             answers=answers,
-            answer_mask=answer_mask
+            answer_tokens=answer_tokens,
+            answer_masks=answer_mask
         )

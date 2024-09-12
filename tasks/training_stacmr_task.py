@@ -7,7 +7,6 @@ from utils.logging_utils import setup_logger
 from tasks.open_ended_task import OpenEndedTask
 from builders.task_builder import META_TASK
 import evaluation
-import evaluate
 from pycocoevalcap.cider.cider import Cider
 from data_utils.utils import get_tokenizer
 import os
