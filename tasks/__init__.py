@@ -7,3 +7,4 @@ from .training_m4c_task import TrainingM4C
 from .training_mmf_task import TrainingMMF
 from .vlsp_evjvqa_task import VlspEvjVqaTask
 from .training_stacmr_task import TrainingStacMR
+from .training_mmf_task import TrainingMT5

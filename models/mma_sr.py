@@ -3,15 +3,11 @@ import functools
 import torch
 from torch import nn
 import torch.nn.functional as F
-from torch import nn
-import numpy
-import torch.nn.functional as F
 from omegaconf import OmegaConf
 from transformers.models.bert.modeling_bert import BertConfig
 
 from utils.logging_utils import setup_logger
 from builders.model_builder import META_ARCHITECTURE
-from models.utils import generate_padding_mask, generate_sequential_mask
 
 logger = setup_logger()
 

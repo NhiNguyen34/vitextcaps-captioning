@@ -1,10 +1,16 @@
-from transformers.models.mt5.modeling_mt5 import MT5EncoderModel, MT5ForConditionalGeneration
+from transformers.models.mt5.modeling_mt5 import MT5ForConditionalGeneration
 from transformers import AutoTokenizer, AutoConfig
+import torch
 from torch import nn
 import torch.nn.functional as F
+from utils.logging_utils import setup_logger
+from builders.model_builder import META_ARCHITECTURE
+logger = setup_logger()
 
-class VIC_mT5(nn.Module):
-    def __init__(self, vocab, config):
+
+@META_ARCHITECTURE.register()
+class MT5_MODEL(nn.Module):
+    def __init__(self, config, vocab):
         super().__init__()
         self.config = config
         self.pretrained_config = AutoConfig.from_pretrained("google/mt5-base")

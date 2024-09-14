@@ -17,7 +17,7 @@ class ViTCFeatureDataset(FeatureDataset):
                  json_path: str,
                  vocab,
                  config,
-                 tokenizer: str = 'mbert') -> None:
+                 tokenizer) -> None:
         super().__init__(json_path, vocab, config)
         self.fasttext_path = config.FEATURE_PATH.FASTTEXT
 
@@ -25,7 +25,7 @@ class ViTCFeatureDataset(FeatureDataset):
         self.scene_text_features_path = config.FEATURE_PATH.SCENE_TEXT
         self.scene_text_threshold = config.SCENE_TEXT_THRESHOLD
         self.max_scene_text = config.MAX_SCENE_TEXT
-        self.tokenizer = get_tokenizer(tokenizer)
+        self.tokenizer = get_tokenizer(config.TOKENIZER.PRETRAINED_NAME)
 
     def load_annotations(self, json_data: Dict) -> List[Dict]:
         annotations = []

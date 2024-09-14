@@ -40,7 +40,7 @@ class BCEWithMaskLogitsLoss(nn.Module):
         return loss
 
 @META_TASK.register()
-class TrainingMMF(OpenEndedTask):
+class TrainingMT5(OpenEndedTask):
     def __init__(self, config):
         super().__init__(config)
         self.tokenizer = get_tokenizer(config.DATASET.TOKENIZER.PRETRAINED_NAME)
