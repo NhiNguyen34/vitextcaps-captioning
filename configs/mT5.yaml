@@ -1,6 +1,9 @@
 TASK: TrainingMMF
 
 DATASET:
+  TOKENIZER:
+    PRETRAINED_NAME: mt5-base
+    PADDING_INDEX: 0
   FEATURE_DATASET:
     TYPE: OcrFeatureDataset
     BATCH_SIZE: 64

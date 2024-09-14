@@ -1,6 +1,9 @@
 TASK: TrainingStacMR  
 
 DATASET:
+  TOKENIZER:
+    PRETRAINED_NAME: mbert
+    PADDING_INDEX: 0
   FEATURE_DATASET:
     TYPE: ViTCFeatureDataset
     BATCH_SIZE: 64

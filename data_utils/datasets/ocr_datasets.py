@@ -45,19 +45,19 @@ class OcrFeatureDataset(FeatureDataset):
         for key, feature in features.items():
             if key == 'det_features':
                 if features[key].shape[0] < 1:
-                    features[key] = np.zeros([1, 256])
+                    features[key] = np.zeros([2, 256])
             elif key == 'rec_features':
                 if features[key].shape[0] < 1:
-                    features[key] = np.zeros([1, 256])
+                    features[key] = np.zeros([2, 256])
             elif key == 'boxes':
                 if features[key].shape[0] < 1:
-                    features[key] = np.zeros([1, 4])
+                    features[key] = np.zeros([2, 4])
             elif key == 'texts':
                 if len(features[key]) == 0:
-                    features[key] = ['no_token']
+                    features[key] = ['no_token', 'no_token']
             elif key == 'scores':
                 if len(features[key]) == 0:
-                    features[key] = [0]
+                    features[key] = [0, 0]
 
             if isinstance(feature, np.ndarray):
                 features[key] = torch.tensor(feature, dtype=torch.float32)
@@ -154,19 +154,19 @@ class OcrDictionaryDataset(DictionaryDataset):
         for key, feature in features.items():
             if key == 'det_features':
                 if features[key].shape[0] < 1:
-                    features[key] = np.zeros([1, 256])
+                    features[key] = np.zeros([2, 256])
             elif key == 'rec_features':
                 if features[key].shape[0] < 1:
-                    features[key] = np.zeros([1, 256])
+                    features[key] = np.zeros([2, 256])
             elif key == 'boxes':
                 if features[key].shape[0] < 1:
-                    features[key] = np.zeros([1, 4])
+                    features[key] = np.zeros([2, 4])
             elif key == 'texts':
                 if len(features[key]) == 0:
-                    features[key] = ['no_token']
+                    features[key] = ['no_token', 'no_token']
             elif key == 'scores':
                 if len(features[key]) == 0:
-                    features[key] = [0]
+                    features[key] = [0, 0]
 
             if isinstance(feature, np.ndarray):
                 features[key] = torch.tensor(feature, dtype=torch.float32)
