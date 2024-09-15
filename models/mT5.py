@@ -96,7 +96,7 @@ class MT5_MODEL(nn.Module):
         obj_mmt_in = self.obj_drop(obj_mmt_in)
         fwd_results["obj_mmt_in"] = obj_mmt_in
         obj_nums = torch.tensor([obj_feat.shape[1]]*obj_mmt_in.shape[0])
-        fwd_results["obj_mask"] = _get_mask(obj_nums, obj_mmt_in.size(1))
+        fwd_results["obj_mask"] = _get_mask(obj_nums.to(obj_feat.device), obj_mmt_in.size(1))
 
     def _forward_ocr_encoding(self, items, fwd_results):
         # OCR FastText feature (300-dim)
@@ -142,8 +142,7 @@ class MT5_MODEL(nn.Module):
             mask = item_.sum(dim=1) != 0
             max_feat.append(item_[mask].shape[0])
         max_feat = torch.tensor(max_feat)
-        fwd_results["ocr_mask"] = _get_mask(max_feat, ocr_mmt_in.size(1)).squeeze()
-
+        fwd_results["ocr_mask"] = _get_mask(max_feat.to(ocr_mmt_in.device), ocr_mmt_in.size(1)).squeeze()
 
     def _forward_encoder(self, items, fwd_results):
         input_embs = torch.cat([fwd_results['obj_mmt_in'], fwd_results['ocr_mmt_in']], dim=1)

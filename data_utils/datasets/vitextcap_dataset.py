@@ -123,6 +123,7 @@ class ViTCFeatureDataset(FeatureDataset):
         answer_tokens_ = self.tokenizer(" ".join(answer),
                                         padding="max_length",
                                         add_special_tokens=False,
+                                        max_length=410,
                                         return_tensors="pt")
 
         answer_tokens = answer_tokens_.input_ids  # remove eos_token in answer
@@ -254,6 +255,7 @@ class ViTCDictionaryDataset(DictionaryDataset):
         answer_tokens_ = self.tokenizer(" ".join(answers),
                                         padding="max_length",
                                         add_special_tokens=False,
+                                        max_length=410,
                                         return_tensors="pt")
 
         answer_tokens = answer_tokens_.input_ids
