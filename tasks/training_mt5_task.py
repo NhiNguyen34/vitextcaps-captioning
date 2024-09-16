@@ -43,8 +43,9 @@ class BCEWithMaskLogitsLoss(nn.Module):
 class TrainingMT5(OpenEndedTask):
     def __init__(self, config):
         super().__init__(config)
-        self.tokenizer = get_tokenizer(config.DATASET.TOKENIZER.PRETRAINED_NAME)
-        self.loss_fn = BCEWithMaskLogitsLoss(ignore_index=self.config.DATASET.FEATURE_DATASET.TOKENIZER.PADDING_INDEX)
+        print(config)
+        self.tokenizer = get_tokenizer(config.DATASET.FEATURE_DATASET.TOKENIZER.PRETRAINED_NAME)
+        self.loss_fn = BCEWithMaskLogitsLoss(ignore_index=config.DATASET.FEATURE_DATASET.TOKENIZER.PADDING_INDEX)
         #self.loss_fn = NLLLoss(ignore_index=self.vocab.padding_idx)
 
     def evaluate_loss(self, dataloader):
