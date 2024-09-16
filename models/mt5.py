@@ -13,6 +13,7 @@ class MT5_MODEL(nn.Module):
     def __init__(self, config, vocab):
         super().__init__()
         self.config = config
+        self.d_model = self.config.D_MODEL
         self.pretrained_config = AutoConfig.from_pretrained("google/mt5-base")
         self.build()
 
@@ -96,7 +97,7 @@ class MT5_MODEL(nn.Module):
         obj_mmt_in = self.obj_drop(obj_mmt_in)
         fwd_results["obj_mmt_in"] = obj_mmt_in
         obj_nums = torch.tensor([obj_feat.shape[1]]*obj_mmt_in.shape[0])
-        fwd_results["obj_mask"] = _get_mask(obj_nums.to(obj_feat.device), obj_mmt_in.size(1))
+        fwd_results["obj_mask"] = _get_mask(obj_nums.to(obj_feat.device), obj_mmt_in.size(1)).squeeze()
 
     def _forward_ocr_encoding(self, items, fwd_results):
         # OCR FastText feature (300-dim)
