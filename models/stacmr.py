@@ -72,7 +72,7 @@ class VSRN(nn.Module):
                 item,
                 mode='train'):
 
-        obj_boxes = item.grid_boxes.squeeze().to(self.config.DEVICE)
+        obj_boxes = item.region_boxes.squeeze().to(self.config.DEVICE)
         obj_features = item.region_features.to(self.config.DEVICE)
         ocr_boxes = item.ocr_boxes.squeeze().to(self.config.DEVICE)
         ocr_token_embeddings = item.ocr_fasttext_features.to(self.config.DEVICE)
