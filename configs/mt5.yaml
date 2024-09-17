@@ -73,7 +73,7 @@ TRAINING:
 
 MODEL:
   ARCHITECTURE: MT5_MODEL
-  NAME: mt5_vinvl
+  NAME: mt5__vinvl_swintestspotter
   DEVICE: cuda
   D_MODEL: 768
   OBJECT_EMBEDDING:
