@@ -15,7 +15,7 @@ DATASET:
     WORD_EMBEDDING: ViFastText
     WORD_EMBEDDING_CACHE: null
     TOKENIZER:
-      PRETRAINED_NAME: mt5-base
+      PRETRAINED_NAME: vit5-base
       PADDING_INDEX: 0
   DICT_DATASET:
     TYPE: ViTCDictionaryDataset
@@ -31,7 +31,7 @@ DATASET:
     WORD_EMBEDDING: ViFastText
     WORD_EMBEDDING_CACHE: null
     TOKENIZER:
-      PRETRAINED_NAME: mt5-base
+      PRETRAINED_NAME: vit5-base
       PADDING_INDEX: 0
   MIN_FREQ: 1
   VOCAB:
@@ -72,8 +72,8 @@ TRAINING:
   PATIENCE: 5
 
 MODEL:
-  ARCHITECTURE: MT5_MODEL
-  NAME: mt5_vinvl
+  ARCHITECTURE: VIT5_MODEL
+  NAME: vit5__vinvl_swintestspotter
   DEVICE: cuda
   D_MODEL: 768
   OBJECT_EMBEDDING:

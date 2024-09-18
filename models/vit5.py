@@ -9,12 +9,12 @@ logger = setup_logger()
 
 
 @META_ARCHITECTURE.register()
-class MT5_MODEL(nn.Module):
+class VIT5_MODEL(nn.Module):
     def __init__(self, config, vocab):
         super().__init__()
         self.config = config
         self.d_model = self.config.D_MODEL
-        self.pretrained_config = AutoConfig.from_pretrained("google/mt5-base")
+        self.pretrained_config = AutoConfig.from_pretrained("VietAI/vit5-base")
         self.build()
 
     def build(self):

@@ -60,10 +60,10 @@ def get_tokenizer(tokenizer):
                   "See the docs at https://github.com/huggingface/transformers for more information.")
             raise
 
-    elif tokenizer == 'mt5-base':
+    elif tokenizer == 'vit5-base':
         try:
             from transformers import AutoTokenizer
-            tokenizer = AutoTokenizer.from_pretrained('google/mt5-base')
+            tokenizer = AutoTokenizer.from_pretrained('VietAI/vit5-base')
             return tokenizer
         except ImportError:
             print("Please install transformers package. "

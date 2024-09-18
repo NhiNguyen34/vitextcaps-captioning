@@ -16,7 +16,7 @@ DATASET:
     WORD_EMBEDDING: ViFastText
     WORD_EMBEDDING_CACHE: null
     TOKENIZER:
-      PRETRAINED_NAME: mbert
+      PRETRAINED_NAME: vit5-base
       PADDING_INDEX: 0
   DICT_DATASET:
     TYPE: ViTCDictionaryDataset
@@ -32,7 +32,7 @@ DATASET:
     WORD_EMBEDDING: ViFastText
     WORD_EMBEDDING_CACHE: null
     TOKENIZER:
-      PRETRAINED_NAME: mbert
+      PRETRAINED_NAME: vit5-base
       PADDING_INDEX: 0
   MIN_FREQ: 1
   VOCAB:
@@ -101,7 +101,7 @@ MODEL:
   CLASSIFIER:
     OCR_MAX_NUM: 50
     MAX_LEN: 60
-    VOCAB_SIZE: 119547 # mbert vocab size
+    VOCAB_SIZE: 36096 # mbert vocab size
 
   TEXT_EMBEDDING:
     ARCHITECTURE: UsualEmbedding
