@@ -107,7 +107,7 @@ def order_sim(im, s):
 class TrainingStacMR(OpenEndedTask):
     def __init__(self, config):
         super().__init__(config)
-        self.tokenizer = get_tokenizer(cconfig.DATASET.FEATURE_DATASET.TOKENIZER.PRETRAINED_NAME)
+        self.tokenizer = get_tokenizer(config.DATASET.FEATURE_DATASET.TOKENIZER.PRETRAINED_NAME)
         self.crit = LanguageModelCriterion()
         self.criterion = ContrastiveLoss(margin=config.MODEL.LOSS_FN.MARGIN,
                                          measure=config.MODEL.LOSS_FN.MEASURE,

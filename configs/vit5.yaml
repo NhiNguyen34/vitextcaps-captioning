@@ -73,7 +73,7 @@ TRAINING:
 
 MODEL:
   ARCHITECTURE: VIT5_MODEL
-  NAME: vit5__vinvl_swintestspotter
+  NAME: vit5_vinvl_swintestspotter
   DEVICE: cuda
   D_MODEL: 768
   OBJECT_EMBEDDING:
