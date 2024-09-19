@@ -30,6 +30,7 @@ class Meteor:
                 stdin=subprocess.PIPE, \
                 stdout=subprocess.PIPE, \
                 stderr=subprocess.PIPE)
+        
         # Used to guarantee thread safety
         self.lock = threading.Lock()
 
