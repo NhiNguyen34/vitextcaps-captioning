@@ -10,18 +10,18 @@ logger = setup_logger()
 
 @META_ARCHITECTURE.register()
 class VIT5_MODEL(nn.Module):
-    def __init__(self, config, vocab):
+    def __init__(self, config, vocab, pretrained=False):
         super().__init__()
         self.config = config
         self.d_model = self.config.D_MODEL
         self.pretrained_config = AutoConfig.from_pretrained("VietAI/vit5-base")
-        self.build()
+        self.build(pretrained)
 
-    def build(self):
+    def build(self, pretrained):
         # split model building into several components
         self._build_obj_encoding()
         self._build_ocr_encoding()
-        self._build_encoder_decoder()
+        self._build_encoder_decoder(pretrained=pretrained)
         # self._build_decoder()
 
     def _build_obj_encoding(self):
@@ -60,13 +60,14 @@ class VIT5_MODEL(nn.Module):
     #     self.encoder = MT5EncoderModel(self.pretrained_config)
     #     self.encoder.from_pretrained("google/mt5-base")
 
-    def _build_encoder_decoder(self):
+    def _build_encoder_decoder(self, pretrained=False):
         # self.pretrained_config.update({
         #     "is_decoder": True,
         #     "add_cross_attention": True
         # })
         mt5_model = MT5ForConditionalGeneration(self.pretrained_config)
-        mt5_model.from_pretrained("google/mt5-base")
+        if pretrained:
+            mt5_model.from_pretrained("google/mt5-base")
 
         self.encoder = mt5_model.encoder
         self.decoder = mt5_model.decoder

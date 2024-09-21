@@ -1,4 +1,4 @@
-TASK: TrainingMT5
+TASK: TrainingViT5
 
 DATASET:
   FEATURE_DATASET:

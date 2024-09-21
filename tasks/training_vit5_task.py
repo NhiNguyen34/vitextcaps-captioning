@@ -40,7 +40,7 @@ class BCEWithMaskLogitsLoss(nn.Module):
         return loss
 
 @META_TASK.register()
-class TrainingMT5(OpenEndedTask):
+class TrainingViT5(OpenEndedTask):
     def __init__(self, config):
         super().__init__(config)
         print(config)
