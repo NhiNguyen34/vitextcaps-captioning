@@ -66,6 +66,7 @@ class VIT5_MODEL(nn.Module):
         #     "add_cross_attention": True
         # })
         mt5_model = MT5ForConditionalGeneration(self.pretrained_config)
+        
         if pretrained:
             mt5_model.from_pretrained("google/mt5-base")
 

@@ -7,4 +7,4 @@ from .training_m4c_task import TrainingM4C
 from .training_mmf_task import TrainingMMF
 from .vlsp_evjvqa_task import VlspEvjVqaTask
 from .training_stacmr_task import TrainingStacMR
-from .training_mt5_task import TrainingViT5
+from .training_vit5_task import TrainingViT5
