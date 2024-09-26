@@ -10,7 +10,7 @@ import argparse
 
 def load_model():
     processor = AutoProcessor.from_pretrained("Salesforce/blip2-opt-2.7b")
-    model = Blip2ForConditionalGeneration.from_pretrained("Salesforce/blip2-opt-2.7b", load_in_4bit=True,
+    model = Blip2ForConditionalGeneration.from_pretrained("Salesforce/blip2-opt-2.7b", load_in_8bit=True,
                                                           torch_dtype=torch.float16)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model.to(device)
