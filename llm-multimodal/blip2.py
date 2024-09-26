@@ -1,5 +1,5 @@
-!pip install --upgrade -q transformers bitsandbytes datasets accelerate
-!pip install git+https://github.com/huggingface/transformers.git
+# !pip install --upgrade -q transformers bitsandbytes datasets accelerate
+# !pip install git+https://github.com/huggingface/transformers.git
 
 import os
 import pandas as pd
