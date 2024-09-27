@@ -14,7 +14,7 @@ pip install git+https://github.com/huggingface/transformers.git
 
 ## Usage
 
-1. **Prepare your images**: Place all images you want to caption in a single folder. Supported formats are `.jpg`, `.jpeg`, and `.png`.
+1. **Prepare your images**: Place all images you want to caption in a single folder. Supported formats are `.jpg`, and `.png`.
 
 2. **Run the script**: Use the following command to run the script, replacing `<folder_path>`, `<output_file>`, and `<max_new_tokens>` with your desired values.
 
@@ -29,7 +29,9 @@ python llm-multimodal/blip2.py <folder_path> <output_file> <max_new_tokens>
 ## Example
 
 ```
-python llm-multimodal/blip2.py ./images captions.csv 415
+!python llm-multimodal/blip2.py ./images captions.csv 415
+
+!python llava.py --folder_path test-output-folder --output_file llava.csv
 ```
 
 This command will generate captions for all images in the `./images` folder and save them to `captions.csv`.
