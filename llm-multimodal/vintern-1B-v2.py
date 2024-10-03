@@ -10,6 +10,8 @@ import pandas as pd
 from tqdm import tqdm
 from glob import glob
 
+# !pip install -q -U einops flash_attn accelerate bitsandbytes
+
 IMAGENET_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_STD = (0.229, 0.224, 0.225)
 
