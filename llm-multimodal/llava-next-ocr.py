@@ -12,7 +12,7 @@ def main():
     parser = argparse.ArgumentParser(description='Process image captioning.')
     parser.add_argument('--folder_path', type=str, required=True, help='Path to the folder containing images.')
     parser.add_argument('--max_new_tokens', type=int, default=500, help='Maximum number of new tokens to generate.')
-    parser.add_argument('--fasttext_path', type=str, required=True, help='Path to the folder containing fasttext files.')
+    parser.add_argument('--fasttext_path', type=str, required=True, help='Path to the folder containing  ocr tokens.')
     parser.add_argument('--output_file', type=str, required=True, help='Output CSV file to save results.')
     args = parser.parse_args()
 

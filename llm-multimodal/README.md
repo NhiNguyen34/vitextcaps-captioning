@@ -25,6 +25,7 @@ python llm-multimodal/blip2.py <folder_path> <output_file> <max_new_tokens>
 - `<folder_path>`: Path to the folder containing images.
 - `<output_file>`: Name of the output CSV file where captions will be saved.
 - `<max_new_tokens>`: Maximum number of new tokens to generate for each caption.
+- `<fasttext_path>`: Path to the folder containing ocr tokens.
 
 ## Example
 
