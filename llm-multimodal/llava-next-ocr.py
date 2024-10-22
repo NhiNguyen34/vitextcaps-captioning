@@ -12,7 +12,7 @@ def main():
     parser = argparse.ArgumentParser(description='Process image captioning.')
     parser.add_argument('--folder_path', type=str, required=True, help='Path to the folder containing images.')
     parser.add_argument('--max_new_tokens', type=int, default=500, help='Maximum number of new tokens to generate.')
-    parser.add_argument('--fasttext_path', type=str, required=True, help='Path to the folder containing  ocr tokens.')
+    parser.add_argument('--fasttext_path', type=str, required=True, help='Path to the folder containing  ocr tokens of images.')
     parser.add_argument('--output_file', type=str, required=True, help='Output CSV file to save results.')
     args = parser.parse_args()
 
@@ -40,7 +40,7 @@ def main():
 
               "role": "user",
               "content": [
-                  {"type": "text", "text": f"Hình ảnh chứa văn bản: {texts}. Hãy mô tả hình ảnh một cách chi tiết và câu mô tả cần chứa các dòng chữ xuất hiện trên các vật thể đã nêu ở trên, kết hợp chúng một cách tự nhiên với phần mô tả.'"},
+                  {"type": "text", "text": f"Bạn là chuyên gia phân tích hình ảnh và nhận dạng văn bản. Nhiệm vụ là tạo chú thích chi tiết, ưu tiên diễn giải văn bản trong ảnh. Hãy xác định đối tượng, màu sắc, bố cục và quét toàn bộ văn bản để hiểu vai trò và mối liên hệ với hình ảnh. Hình ảnh chứa văn bản: {texts} Kết hợp các yếu tố này để viết chú thích ngắn, độ dài 1 câu, rõ ràng và chính xác, nhấn mạnh ý nghĩa của văn bản. Nếu văn bản bị che khuất hoặc khó đọc, hãy ghi chú và phỏng đoán. Đảm bảo chú thích phản ánh đúng bối cảnh hình ảnh khi cần.'"},
                    {"type": "image"},
                 ],
             },

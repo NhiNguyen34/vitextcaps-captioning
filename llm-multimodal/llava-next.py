@@ -34,7 +34,7 @@ def main():
 
               "role": "user",
               "content": [
-                  {"type": "text", "text": "Hình ảnh chứa văn bản. Nhận diện và mô tả nội dung chữ bằng tiếng Việt. Đồng thời, mô tả các đối tượng và bối cảnh chính trong hình. Văn bản mô tả điều gì?"},
+                  {"type": "text", "text": "Bạn là chuyên gia phân tích hình ảnh và nhận dạng văn bản. Nhiệm vụ là tạo chú thích chi tiết, ưu tiên diễn giải văn bản trong ảnh. Hãy xác định đối tượng, màu sắc, bố cục và quét toàn bộ văn bản để hiểu vai trò và mối liên hệ với hình ảnh. Kết hợp các yếu tố này để viết chú thích ngắn, độ dài 1 câu, rõ ràng và chính xác, nhấn mạnh ý nghĩa của văn bản. Nếu văn bản bị che khuất hoặc khó đọc, hãy ghi chú và phỏng đoán. Đảm bảo chú thích phản ánh đúng bối cảnh hình ảnh khi cần."},
                    {"type": "image"},
                 ],
             },
